@@ -1,6 +1,12 @@
 index_col: 'flat_id'
 target_col: 'price'
 
+drop_cols:
+  - building_id
+
+categorical_cols:
+  - building_type_int
+
 one_hot_drop: 'if_binary'
 
 test_size: 0.2

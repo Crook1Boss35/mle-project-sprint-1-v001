@@ -17,6 +17,8 @@ stages:
     params:
       - index_col
       - target_col
+      - drop_cols
+      - categorical_cols
       - one_hot_drop
       - test_size
       - random_state
@@ -34,6 +36,7 @@ stages:
     params:
       - index_col
       - target_col
+      - drop_cols
       - test_size
       - random_state
       - metrics

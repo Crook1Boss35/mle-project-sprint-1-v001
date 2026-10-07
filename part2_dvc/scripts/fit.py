@@ -23,9 +23,13 @@ def fit_model():
         index_col=params["index_col"],
     )
 
-    # 3. Разделение признаков и целевой переменной
+    # 3. Признаки и целевая переменная
     X = data.drop(
-        columns=[params["target_col"]],
+        columns=[
+            params["target_col"],
+            *params["drop_cols"],
+        ],
+        errors="ignore",
     )
 
     y = data[params["target_col"]]
@@ -38,14 +42,15 @@ def fit_model():
         random_state=params["random_state"],
     )
 
-    # 5. Определение типов признаков
-    cat_cols = X_train.select_dtypes(
-        include=["object", "category"],
-    ).columns.tolist()
+    # 5. Категориальные признаки задаём явно
+    cat_cols = params["categorical_cols"]
 
-    num_cols = X_train.select_dtypes(
-        include=["number", "bool"],
-    ).columns.tolist()
+    # Остальные признаки числовые
+    num_cols = [
+        col
+        for col in X_train.columns
+        if col not in cat_cols
+    ]
 
     # 6. Предобработка
     preprocessor = ColumnTransformer(
@@ -67,7 +72,7 @@ def fit_model():
         ]
     )
 
-    # 7. Базовая модель регрессии
+    # 7. Модель
     model = CatBoostRegressor(
         iterations=params["iterations"],
         random_seed=params["random_state"],
@@ -75,7 +80,7 @@ def fit_model():
         allow_writing_files=False,
     )
 
-    # 8. Единый Pipeline
+    # 8. Pipeline
     pipeline = Pipeline(
         steps=[
             ("preprocessor", preprocessor),
@@ -83,7 +88,7 @@ def fit_model():
         ]
     )
 
-    # 9. Обучение только на train
+    # 9. Обучение
     pipeline.fit(X_train, y_train)
 
     # 10. Сохранение модели

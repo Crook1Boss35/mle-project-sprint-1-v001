@@ -1,0 +1,25 @@
+{
+    "baseline": {
+        "description": "building_id included; building_type_int treated as numerical",
+        "metrics": {
+            "mae": 3196720.351,
+            "rmse": 6895443.022,
+            "r2": 0.885,
+            "test_size": 26186
+        }
+    },
+    "experiment": {
+        "description": "building_id removed; building_type_int treated as categorical",
+        "metrics": {
+            "mae": 3183070.235,
+            "rmse": 6641651.003,
+            "r2": 0.894,
+            "test_size": 26186
+        }
+    },
+    "difference": {
+        "mae": -13650.116,
+        "rmse": -253792.019,
+        "r2": 0.009
+    }
+}

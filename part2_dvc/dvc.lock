@@ -29,10 +29,14 @@ stages:
       size: 17692208
     - path: scripts/fit.py
       hash: md5
-      md5: 516687fd37eb328e05a8c57d48a7b9f8
-      size: 2388
+      md5: ef64cd2f0e75caecb21d12da2bf96f4a
+      size: 2395
     params:
       params.yaml:
+        categorical_cols:
+        - building_type_int
+        drop_cols:
+        - building_id
         index_col: flat_id
         iterations: 100
         one_hot_drop: if_binary
@@ -43,12 +47,12 @@ stages:
     outs:
     - path: models/fitted_model.pkl
       hash: md5
-      md5: 395a0a9cbca040e8c2ba0e48f491a2db
-      size: 121758
+      md5: 1d1496f9b99147caebcce05e8a48582a
+      size: 122938
       cloud:
         my_storage:
-          etag: 395a0a9cbca040e8c2ba0e48f491a2db
-          version_id: 00065D45903FBC39
+          etag: 1d1496f9b99147caebcce05e8a48582a
+          version_id: 00065D468AA0B0B5
   evaluate_model:
     cmd: python scripts/evaluate.py
     deps:
@@ -58,14 +62,16 @@ stages:
       size: 17692208
     - path: models/fitted_model.pkl
       hash: md5
-      md5: 395a0a9cbca040e8c2ba0e48f491a2db
-      size: 121758
+      md5: 1d1496f9b99147caebcce05e8a48582a
+      size: 122938
     - path: scripts/evaluate.py
       hash: md5
       md5: 48d365786c2d666a81158637ce39384a
       size: 1828
     params:
       params.yaml:
+        drop_cols:
+        - building_id
         index_col: flat_id
         metrics:
         - mae
@@ -78,9 +84,9 @@ stages:
     outs:
     - path: cv_results/cv_res.json
       hash: md5
-      md5: 2f84b97f0b3b49a83b6cc8882de85850
+      md5: 535848139651168f1785a09fa61a3352
       size: 92
       cloud:
         my_storage:
-          etag: 2f84b97f0b3b49a83b6cc8882de85850
-          version_id: 00065D4590410DF4
+          etag: 535848139651168f1785a09fa61a3352
+          version_id: 00065D468AA0077A
