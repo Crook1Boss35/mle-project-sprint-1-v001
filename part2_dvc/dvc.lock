@@ -1,0 +1,86 @@
+schema: '2.0'
+stages:
+  get_data:
+    cmd: python scripts/data.py
+    deps:
+    - path: scripts/data.py
+      hash: md5
+      md5: 973cabc29abf23103a2581e612a9be70
+      size: 1443
+    params:
+      params.yaml:
+        index_col: flat_id
+        retrain: true
+    outs:
+    - path: data/initial_data.csv
+      hash: md5
+      md5: 49acc9a17f2532e88e4c2262a60f5613
+      size: 17692208
+      cloud:
+        my_storage:
+          etag: 49acc9a17f2532e88e4c2262a60f5613
+          version_id: 00065D4590494248
+  fit_model:
+    cmd: python scripts/fit.py
+    deps:
+    - path: data/initial_data.csv
+      hash: md5
+      md5: 49acc9a17f2532e88e4c2262a60f5613
+      size: 17692208
+    - path: scripts/fit.py
+      hash: md5
+      md5: 516687fd37eb328e05a8c57d48a7b9f8
+      size: 2388
+    params:
+      params.yaml:
+        index_col: flat_id
+        iterations: 100
+        one_hot_drop: if_binary
+        random_state: 42
+        retrain: true
+        target_col: price
+        test_size: 0.2
+    outs:
+    - path: models/fitted_model.pkl
+      hash: md5
+      md5: 395a0a9cbca040e8c2ba0e48f491a2db
+      size: 121758
+      cloud:
+        my_storage:
+          etag: 395a0a9cbca040e8c2ba0e48f491a2db
+          version_id: 00065D45903FBC39
+  evaluate_model:
+    cmd: python scripts/evaluate.py
+    deps:
+    - path: data/initial_data.csv
+      hash: md5
+      md5: 49acc9a17f2532e88e4c2262a60f5613
+      size: 17692208
+    - path: models/fitted_model.pkl
+      hash: md5
+      md5: 395a0a9cbca040e8c2ba0e48f491a2db
+      size: 121758
+    - path: scripts/evaluate.py
+      hash: md5
+      md5: 48d365786c2d666a81158637ce39384a
+      size: 1828
+    params:
+      params.yaml:
+        index_col: flat_id
+        metrics:
+        - mae
+        - rmse
+        - r2
+        random_state: 42
+        retrain: true
+        target_col: price
+        test_size: 0.2
+    outs:
+    - path: cv_results/cv_res.json
+      hash: md5
+      md5: 2f84b97f0b3b49a83b6cc8882de85850
+      size: 92
+      cloud:
+        my_storage:
+          etag: 2f84b97f0b3b49a83b6cc8882de85850
+          version_id: 00065D4590410DF4

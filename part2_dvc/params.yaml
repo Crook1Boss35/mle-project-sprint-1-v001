@@ -1,0 +1,16 @@
+index_col: 'flat_id'
+target_col: 'price'
+
+one_hot_drop: 'if_binary'
+
+test_size: 0.2
+random_state: 42
+
+iterations: 100
+
+metrics:
+  - mae
+  - rmse
+  - r2
+
+retrain: true

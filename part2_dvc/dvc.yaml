@@ -1,0 +1,42 @@
+stages:
+  get_data:
+    cmd: python scripts/data.py
+    deps:
+      - scripts/data.py
+    params:
+      - index_col
+      - retrain
+    outs:
+      - data/initial_data.csv
+
+  fit_model:
+    cmd: python scripts/fit.py
+    deps:
+      - data/initial_data.csv
+      - scripts/fit.py
+    params:
+      - index_col
+      - target_col
+      - one_hot_drop
+      - test_size
+      - random_state
+      - iterations
+      - retrain
+    outs:
+      - models/fitted_model.pkl
+
+  evaluate_model:
+    cmd: python scripts/evaluate.py
+    deps:
+      - data/initial_data.csv
+      - models/fitted_model.pkl
+      - scripts/evaluate.py
+    params:
+      - index_col
+      - target_col
+      - test_size
+      - random_state
+      - metrics
+      - retrain
+    outs:
+      - cv_results/cv_res.json
